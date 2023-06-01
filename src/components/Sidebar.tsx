@@ -2,6 +2,8 @@ import { Box, MenuItem, Drawer, IconButton } from '@mui/material';
 import React, { FC, useEffect } from 'react';
 import Link from 'next/link';
 import CloseIcon from '@mui/icons-material/Close';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const routes = [
   {
@@ -20,10 +22,6 @@ const routes = [
     role: 'is_auth',
   },
   {
-    name: 'line',
-    path: '',
-  },
-  {
     name: 'Войти',
     path: '/login',
     role: 'is_not_auth',
@@ -33,6 +31,11 @@ const routes = [
     path: '/register',
     role: 'is_not_auth',
   },
+  {
+    name: 'Выйти',
+    path: 'logout',
+    role: 'is_auth',
+  },
 ];
 
 const Sidebar: FC<{
@@ -40,17 +43,23 @@ const Sidebar: FC<{
   setOpen: (open: boolean) => void;
 }> = ({ open, setOpen }) => {
   const [openSidebar, setOpenSidebar] = React.useState(false);
+  const { status, data } = useSession();
 
   useEffect(() => {
     setOpenSidebar(open);
   }, [open]);
 
+  const isAuth = status === 'authenticated';
+  const isNotAuth = status === 'unauthenticated';
+  // @ts-ignore
+  const isAuthor = data?.user?.is_author;
+
   return (
     <Box
       sx={{
-        transition: 'all 0.3s ease',
+        transition: 'all 0.2s ease',
         opacity: openSidebar ? '1' : '0',
-        zIndex: openSidebar ? '10' : '-1',
+        zIndex: openSidebar ? '1000' : '-1',
         position: 'absolute',
         top: '0',
         left: '0',
@@ -111,6 +120,27 @@ const Sidebar: FC<{
           if (route.name === 'line') {
             return <hr style={{ border: '2px solid secondary.main' }} />;
           }
+          if (route.path === 'logout' && isAuth)
+            return (
+              <MenuItem
+                onClick={() => {
+                  (async () => {
+                    await signOut();
+                  })();
+                }}
+                sx={{
+                  color: 'secondary.main',
+                  borderRadius: '5px',
+                }}
+              >
+                {route.name}
+              </MenuItem>
+            );
+
+          if (route.role === 'is_auth' && !isAuth) return null;
+          if (route.role === 'is_not_auth' && !isNotAuth) return null;
+          if (route.role === 'is_author' && !isAuthor) return null;
+
           return (
             <Link
               key={route.name + route.path}

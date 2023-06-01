@@ -17,9 +17,9 @@ axiosInstance.interceptors.response.use(
 );
 
 axiosInstance.interceptors.request.use((config) => {
-  if (localStorage && localStorage.getItem('token')) {
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-  }
+  // if (localStorage && localStorage.getItem('token')) {
+  //   config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+  // }
 
   return config;
 });

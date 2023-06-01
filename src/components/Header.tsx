@@ -1,11 +1,16 @@
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Link, MenuItem, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import Link from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import useTypedSession from '@/hooks/useTypedSession';
 
 const Header: FC<{
   setOpenSidebar: (open: boolean) => void;
 }> = ({ setOpenSidebar }) => {
+  const { status, data } = useTypedSession();
+  const { push } = useRouter();
+
   return (
     <Box
       sx={{
@@ -13,7 +18,8 @@ const Header: FC<{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '20px 30px',
+        padding: '10px 20px',
+        backgroundColor: 'grey.500',
       }}
     >
       <IconButton
@@ -36,18 +42,39 @@ const Header: FC<{
           borderRadius: '5px',
           backgroundColor: 'secondary.main',
         }}
-        variant="h4"
+        variant="h6"
       >
-        eBook
+        eBook{' '}
+        <Box
+          color="success.main"
+          sx={{
+            display: 'inline-block',
+          }}
+        >
+          {data?.user?.username && `- ${data?.user?.username}`}
+        </Box>
       </Typography>
-      <Link href="/login">
-        <Typography
+      <Link
+        onClick={() => {
+          if (status === 'authenticated') {
+            signOut();
+          }
+          if (status === 'unauthenticated') {
+            push('/login');
+          }
+        }}
+        sx={{
+          textDecoration: 'none',
+          display: 'inline-block',
+        }}
+      >
+        <MenuItem
           sx={{
             color: 'white',
           }}
         >
-          Выйти
-        </Typography>
+          {status === 'authenticated' ? 'Выйти' : 'Войти'}
+        </MenuItem>
       </Link>
     </Box>
   );

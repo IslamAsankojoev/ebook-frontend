@@ -1,17 +1,21 @@
 import Layout from '@/components/Layout';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { api } from '@/api';
 import { LoadingButton } from '@mui/lab';
+import { signIn, useSession } from 'next-auth/react';
+import axios from 'axios';
+import useAuthRedirect from '@/hooks/useAuthRedirect';
+import Link from 'next/link';
+import { NextPageAuth } from '@/types/auth.types';
 
-const Login = () => {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
+const Login: NextPageAuth = () => {
+  // useAuthRedirect();
+  const { data, status } = useSession();
+
+  const { handleSubmit, control } = useForm({
     mode: 'onChange',
   });
 
@@ -19,15 +23,14 @@ const Login = () => {
     'login',
     ({ username, password }: { username: string; password: string }) =>
       api.AuthService.login(username, password),
-    {
-      onSuccess: (data) => {
-        localStorage.setItem('token', data.access);
-      },
-    },
   );
 
   const onSubmit = async (data: any) => {
-    mutate(data);
+    await signIn('credentials', {
+      username: data.username,
+      password: data.password,
+      redirect: false,
+    });
   };
 
   return (
@@ -87,6 +90,15 @@ const Login = () => {
               Submit
             </LoadingButton>
           </form>
+          <br />
+          <Link
+            href="/register"
+            style={{
+              textDecoration: 'none',
+            }}
+          >
+            <Typography color="secondary.main">Регистрация</Typography>
+          </Link>
         </Box>
       </Box>
     </Layout>
@@ -94,3 +106,5 @@ const Login = () => {
 };
 
 export default Login;
+
+Login.is_not_auth = true;

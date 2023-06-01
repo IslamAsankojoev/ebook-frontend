@@ -4,18 +4,20 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { api } from '@/api';
+import Link from 'next/link';
+import useAuthRedirect from '@/hooks/useAuthRedirect';
+import { NextPageAuth } from '@/types/auth.types';
+import { useRouter } from 'next/router';
 
-const Login = () => {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
+const Register: NextPageAuth = () => {
+  useAuthRedirect();
+  const { handleSubmit, control } = useForm({
     mode: 'onChange',
   });
+  const { push } = useRouter();
 
   const { mutate, isLoading } = useMutation(
-    'login',
+    'register',
     ({
       username,
       email,
@@ -30,7 +32,14 @@ const Login = () => {
   );
 
   const onSubmit = async (data: any) => {
-    mutate({ ...data, is_author: false });
+    mutate(
+      { ...data, is_author: false },
+      {
+        onSuccess: () => {
+          push('/login');
+        },
+      },
+    );
   };
 
   return (
@@ -99,10 +108,21 @@ const Login = () => {
               Submit
             </Button>
           </form>
+          <br />
+          <Link
+            href="/login"
+            style={{
+              textDecoration: 'none',
+            }}
+          >
+            <Typography color="secondary.main">Войти</Typography>
+          </Link>
         </Box>
       </Box>
     </Layout>
   );
 };
 
-export default Login;
+export default Register;
+
+Register.is_not_auth = true;
