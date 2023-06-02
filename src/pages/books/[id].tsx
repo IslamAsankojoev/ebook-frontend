@@ -32,7 +32,6 @@ const Book: NextPageAuth = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [openBook, setOpenBook] = useState(false);
-  const [editing, setEditing] = useState('read');
   const [page, setPage] = useState(1);
   const [pageContent, setPageContent] = useState({
     chapter: '',
@@ -78,10 +77,17 @@ const Book: NextPageAuth = () => {
     },
   );
 
+  const handleDelete = () => {
+    if (confirm('Подтвердите удаление книги')) {
+      deleteMutate();
+    }
+  };
+
   // @ts-ignore
   const { data: book, refetch } = useQuery('book', () => api.BookService.findOne(router.query.id), {
     enabled: !!router.query.id,
     select: (data: IBook) => data,
+    refetchOnWindowFocus: false,
   });
 
   const handleCloseBook = () => {
@@ -130,14 +136,14 @@ const Book: NextPageAuth = () => {
               },
             }}
           >
-            <h1 id="title" contentEditable={editing == 'write'}>
+            <h1 id="title" contentEditable={true}>
               {book?.title}
             </h1>
-            <p id="description" contentEditable={editing == 'write'}>
+            <p id="description" contentEditable={true}>
               {book?.description}
             </p>
             <Box display="flex" gap={2} justifyContent="space-between">
-              {isAuthor && (
+              {/* {isAuthor && (
                 <ToggleButtonGroup
                   color="info"
                   value={editing}
@@ -172,14 +178,14 @@ const Book: NextPageAuth = () => {
                     Просмотр
                   </ToggleButton>
                 </ToggleButtonGroup>
-              )}
+              )} */}
               <Box display="flex" gap={2}>
                 {isAuthor && (
                   <Button
                     color="error"
                     variant="contained"
                     onClick={() => {
-                      deleteMutate();
+                      handleDelete();
                     }}
                     size="small"
                   >

@@ -73,7 +73,7 @@ const Login: NextPageAuth = () => {
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <TextField {...field} label="username" variant="filled" fullWidth />
+                <TextField {...field} label="Логин" variant="filled" fullWidth />
               )}
             />
 
@@ -82,12 +82,12 @@ const Login: NextPageAuth = () => {
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <TextField {...field} label="password" variant="filled" fullWidth />
+                <TextField {...field} label="Пароль" variant="filled" fullWidth />
               )}
             />
 
             <LoadingButton variant="contained" type="submit" fullWidth loading={isLoading}>
-              Submit
+              Войти
             </LoadingButton>
           </form>
           <br />

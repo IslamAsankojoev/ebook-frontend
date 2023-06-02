@@ -2,7 +2,7 @@ import useTypedSession from '@/hooks/useTypedSession';
 import { TypeComponentAuthFields } from '@/types/auth.types';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { FC, memo } from 'react';
+import { FC, memo, useMemo } from 'react';
 const CheckRole: FC<{
   children: JSX.Element;
   Component: TypeComponentAuthFields['Component'];
@@ -17,15 +17,17 @@ const CheckRole: FC<{
   const isAuthor = data?.user?.is_author;
   const isNotAuthor = !data?.user?.is_author;
 
-  if (is_auth && isAuth) return <Children />;
-  if (is_not_auth && isNotAuth) return <Children />;
-  if (is_author && isAuthor) return <Children />;
+  const MemizeComponent = useMemo(() => memo(Children), [children]);
 
-  if (is_auth && isAuth) return <Children />;
-  if (is_author && isAuth) return <Children />;
+  if (is_auth && isAuth) return <MemizeComponent />;
+  if (is_not_auth && isNotAuth) return <MemizeComponent />;
+  if (is_author && isAuthor) return <MemizeComponent />;
 
-  if (is_not_auth && isNotAuth) return <Children />;
-  if (is_author && isAuthor) return <Children />;
+  if (is_auth && isAuth) return <MemizeComponent />;
+  if (is_author && isAuth) return <MemizeComponent />;
+
+  if (is_not_auth && isNotAuth) return <MemizeComponent />;
+  if (is_author && isAuthor) return <MemizeComponent />;
 
   if (is_auth && isNotAuth) {
     router.push('/login');

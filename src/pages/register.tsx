@@ -82,7 +82,7 @@ const Register: NextPageAuth = () => {
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <TextField {...field} label="username" variant="filled" fullWidth />
+                <TextField {...field} label="Логин" variant="filled" fullWidth />
               )}
             />
 
@@ -100,12 +100,12 @@ const Register: NextPageAuth = () => {
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <TextField {...field} label="password" variant="filled" fullWidth />
+                <TextField {...field} label="Пароль" variant="filled" fullWidth />
               )}
             />
 
             <Button variant="contained" type="submit" fullWidth>
-              Submit
+              Регистрация
             </Button>
           </form>
           <br />

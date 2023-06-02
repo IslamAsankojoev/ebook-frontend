@@ -1,15 +1,16 @@
-import { Box, IconButton, Link, MenuItem, Typography } from '@mui/material';
+import { Box, Button, IconButton, Link, MenuItem, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTypedSession from '@/hooks/useTypedSession';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const Header: FC<{
   setOpenSidebar: (open: boolean) => void;
 }> = ({ setOpenSidebar }) => {
   const { status, data } = useTypedSession();
-  const { push } = useRouter();
+  const { push, back } = useRouter();
 
   return (
     <Box
@@ -22,18 +23,33 @@ const Header: FC<{
         backgroundColor: 'grey.500',
       }}
     >
-      <IconButton
-        onClick={() => {
-          setOpenSidebar(true);
-        }}
-      >
-        <MenuIcon
+      <Box>
+        <IconButton
+          onClick={() => {
+            setOpenSidebar(true);
+          }}
+        >
+          <MenuIcon
+            sx={{
+              color: 'white',
+              fontSize: '30px',
+            }}
+          />
+        </IconButton>
+        <Button
+          variant="text"
+          color="inherit"
           sx={{
             color: 'white',
-            fontSize: '30px',
           }}
-        />
-      </IconButton>
+          onClick={() => {
+            back();
+          }}
+          startIcon={<KeyboardArrowLeftIcon />}
+        >
+          назад
+        </Button>
+      </Box>
       <Typography
         sx={{
           color: 'white',
