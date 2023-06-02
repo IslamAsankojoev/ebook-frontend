@@ -1,5 +1,5 @@
 import Layout from '@/components/Layout';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Switch, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 import { NextPageAuth } from '@/types/auth.types';
 import { useRouter } from 'next/router';
+import { CheckBox } from '@mui/icons-material';
 
 const Register: NextPageAuth = () => {
   useAuthRedirect();
@@ -74,7 +75,8 @@ const Register: NextPageAuth = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '20px',
-              width: '300px',
+              width: '340px',
+              maxWidth: '90%',
             }}
           >
             <Controller
@@ -101,6 +103,25 @@ const Register: NextPageAuth = () => {
               defaultValue=""
               render={({ field }) => (
                 <TextField {...field} label="Пароль" variant="filled" fullWidth />
+              )}
+            />
+
+            <Controller
+              name="is_author"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                  }}
+                >
+                  <Switch {...field} />
+                  <Typography>Зарегистрироваться как автор?</Typography>
+                </Box>
               )}
             />
 
