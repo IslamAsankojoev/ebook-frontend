@@ -34,7 +34,7 @@ const Register: NextPageAuth = () => {
 
   const onSubmit = async (data: any) => {
     mutate(
-      { ...data, is_author: false },
+      { ...data, is_author: data.is_author },
       {
         onSuccess: () => {
           push('/login');

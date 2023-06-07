@@ -13,7 +13,7 @@ export const AuthService = {
       username,
       email,
       password,
-      is_author: false,
+      is_author,
     });
 
     return res.data;

@@ -65,7 +65,7 @@ const Login: NextPageAuth = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '20px',
-              width: '300px',
+              width: '340px',
             }}
           >
             <Controller
