@@ -46,7 +46,7 @@ const Book: NextPageAuth = () => {
   const { mutate, isLoading } = useMutation(
     'update book',
     // @ts-ignore
-    (data: IBook) => api.BookService.update(router.query.id, data),
+    (data: IBook) => api.BookService.update(router?.query?.id, data),
     {
       onSettled: () => {
         refetch();
@@ -69,7 +69,7 @@ const Book: NextPageAuth = () => {
   const { mutate: deleteMutate } = useMutation(
     'delete book',
     // @ts-ignore
-    () => api.BookService.delete(router.query.id),
+    () => api.BookService.delete(router?.query?.id),
     {
       onSettled: () => {
         router.push('/books');
@@ -84,11 +84,15 @@ const Book: NextPageAuth = () => {
   };
 
   // @ts-ignore
-  const { data: book, refetch } = useQuery('book', () => api.BookService.findOne(router.query.id), {
-    enabled: !!router.query.id,
-    select: (data: IBook) => data,
-    refetchOnWindowFocus: false,
-  });
+  const { data: book, refetch } = useQuery(
+    'book',
+    () => api.BookService.findOne(router?.query?.id),
+    {
+      enabled: !!router?.query?.id,
+      select: (data: IBook) => data,
+      refetchOnWindowFocus: false,
+    },
+  );
 
   const handleCloseBook = () => {
     setOpenBook(false);
@@ -112,7 +116,7 @@ const Book: NextPageAuth = () => {
 
   useEffect(() => {
     if (book?.pages) {
-      setPageContent(book.pages[page - 1]);
+      setPageContent(book?.pages[page - 1]);
     }
   }, [book]);
 
@@ -207,7 +211,7 @@ const Book: NextPageAuth = () => {
                     onClick={() => {
                       mutate({
                         // @ts-ignore
-                        id: router.query.id,
+                        id: router?.query?.id,
                         // @ts-ignore
                         title: document.querySelector('h1#title')?.textContent,
                         // @ts-ignore
@@ -328,7 +332,7 @@ const Book: NextPageAuth = () => {
         <DialogTitle id="scroll-dialog-title">
           {
             // @ts-ignore
-            pageContent.chapter
+            pageContent?.chapter
           }
         </DialogTitle>
         <DialogContent dividers={scroll === 'paper'}>
@@ -340,9 +344,9 @@ const Book: NextPageAuth = () => {
             onChange={(e, page) => {
               setPageContent({
                 // @ts-ignore
-                chapter: book?.pages[page - 1].chapter,
+                chapter: book?.pages[page - 1]?.chapter,
                 // @ts-ignore
-                content: book?.pages[page - 1].content,
+                content: book?.pages[page - 1]?.content,
               });
             }}
           />
