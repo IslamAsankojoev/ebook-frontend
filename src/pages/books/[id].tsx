@@ -46,7 +46,7 @@ const Book: NextPageAuth = () => {
   const { mutate, isLoading } = useMutation(
     'update book',
     // @ts-ignore
-    (data: IBook) => api.BookService.update(router?.query?.id, data),
+    (data: IBook) => api.BookService.update(router.query?.id, data),
     {
       onSettled: () => {
         refetch();
@@ -86,9 +86,10 @@ const Book: NextPageAuth = () => {
   // @ts-ignore
   const { data: book, refetch } = useQuery(
     'book',
-    () => api.BookService.findOne(router?.query?.id),
+    // @ts-ignore
+    () => api.BookService.findOne(router.query?.id),
     {
-      enabled: !!router?.query?.id,
+      enabled: !!router.query?.id,
       select: (data: IBook) => data,
       refetchOnWindowFocus: false,
     },
@@ -337,7 +338,7 @@ const Book: NextPageAuth = () => {
         </DialogTitle>
         <DialogContent dividers={scroll === 'paper'}>
           <DialogContentText>
-            <Typography>{pageContent.content}</Typography>
+            <Typography>{pageContent?.content}</Typography>
           </DialogContentText>
           <Pagination
             count={book?.pages?.length}
